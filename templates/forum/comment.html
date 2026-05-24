@@ -1,0 +1,28 @@
+<div class="comment" style="{% if depth > 0 %}margin-left:16px;{% endif %}">
+  <div class="comment-header">
+    <strong>u/{{ comment.author.username }}</strong>
+    &nbsp;·&nbsp; {{ comment.created_at|timesince }} ago
+  </div>
+  <div class="comment-body">{{ comment.body|linebreaks }}</div>
+  <div class="comment-actions">
+    <button class="comment-action">&#9650; {{ comment.upvotes }}</button>
+    {% if user.is_authenticated %}
+      <button class="comment-action" onclick="setReply({{ comment.pk }})">&#8617; Reply</button>
+    {% endif %}
+  </div>
+  {% if comment.replies.all %}
+    <div class="replies">
+      {% for reply in comment.replies.all %}
+        {% include "forum/comment.html" with comment=reply depth=1 %}
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>
+
+<script>
+function setReply(id) {
+  document.getElementById('reply-parent-id').value = id;
+  document.querySelector('.comment-form-card textarea').focus();
+  document.querySelector('.comment-form-card').scrollIntoView({behavior:'smooth'});
+}
+</script>

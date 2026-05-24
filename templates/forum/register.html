@@ -1,0 +1,23 @@
+{% extends "forum/base.html" %}
+{% block title %}Sign Up – Threadit{% endblock %}
+{% block content %}
+<div class="form-card">
+  <h2>Sign Up</h2>
+  <form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="form-group">
+      <label>{{ field.label }}</label>
+      {{ field }}
+      {% for error in field.errors %}
+        <ul class="error-list"><li>{{ error }}</li></ul>
+      {% endfor %}
+    </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Create Account</button>
+  </form>
+  <p style="margin-top:16px;font-size:13px;text-align:center;">
+    Already have an account? <a href="{% url 'login' %}">Log In</a>
+  </p>
+</div>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends "forum/base.html" %}
+{% block title %}Threadit – Home{% endblock %}
+{% block content %}
+<div class="page-wrapper">
+  <main>
+    {% if query %}
+      <p style="margin-bottom:12px; font-size:14px; color:#878a8c;">
+        Results for "<strong>{{ query }}</strong>"
+        — <a href="{% url 'home' %}">clear</a>
+      </p>
+    {% endif %}
+
+    {% if posts %}
+      {% for post in posts %}
+      <div class="post-card">
+        <div class="vote-col">
+          <button class="vote-btn" title="upvote">&#9650;</button>
+          <span class="vote-count">{{ post.upvotes }}</span>
+          <button class="vote-btn" title="downvote">&#9660;</button>
+        </div>
+        <div class="post-content">
+          <div class="post-meta">
+            <a href="{% url 'community_detail' post.community.name %}" class="community-link">r/{{ post.community.name }}</a>
+            &nbsp;·&nbsp; Posted by
+            <a href="#">u/{{ post.author.username }}</a>
+            &nbsp;·&nbsp; {{ post.created_at|timesince }} ago
+          </div>
+          <div class="post-title">
+            <a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a>
+          </div>
+          {% if post.body %}
+            <div class="post-body-preview">{{ post.body }}</div>
+          {% endif %}
+          <div class="post-actions">
+            <a href="{% url 'post_detail' post.pk %}" class="post-action-btn">
+              &#128172; {{ post.comment_count }} Comment{{ post.comment_count|pluralize }}
+            </a>
+            {% if user == post.author %}
+              <a href="{% url 'edit_post' post.pk %}" class="post-action-btn">&#9998; Edit</a>
+              <a href="{% url 'delete_post' post.pk %}" class="post-action-btn">&#128465; Delete</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty-state">
+        <h3>Nothing here yet</h3>
+        <p>Be the first to post!</p>
+        {% if user.is_authenticated %}
+          <br><a href="{% url 'create_post' %}" class="btn btn-primary">Create Post</a>
+        {% endif %}
+      </div>
+    {% endif %}
+  </main>
+
+  <aside class="sidebar">
+    <div class="sidebar-card">
+      <div class="sidebar-card-header">&#127968; Home</div>
+      <div class="sidebar-card-body">
+        <p>The front page of Threadit. Jump in and join the conversation.</p>
+        {% if user.is_authenticated %}
+          <a href="{% url 'create_post' %}" class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:8px;">Create Post</a>
+          <a href="{% url 'create_community' %}" class="btn btn-outline" style="width:100%;justify-content:center;">Create Community</a>
+        {% else %}
+          <a href="{% url 'register' %}" class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:8px;">Sign Up</a>
+          <a href="{% url 'login' %}" class="btn btn-outline" style="width:100%;justify-content:center;">Log In</a>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if communities %}
+    <div class="sidebar-card">
+      <div class="sidebar-card-header">&#128218; Top Communities</div>
+      <div class="sidebar-card-body">
+        <ul class="community-list">
+          {% for c in communities %}
+          <li><a href="{% url 'community_detail' c.name %}">r/{{ c.name }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    {% endif %}
+  </aside>
+</div>
+{% endblock %}

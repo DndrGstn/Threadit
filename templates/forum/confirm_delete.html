@@ -1,0 +1,15 @@
+{% extends "forum/base.html" %}
+{% block title %}Delete Post – Threadit{% endblock %}
+{% block content %}
+<div class="form-card">
+  <h2>Delete Post?</h2>
+  <p style="margin-bottom:20px;color:#878a8c;">
+    Are you sure you want to delete "<strong>{{ post.title }}</strong>"? This cannot be undone.
+  </p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+    <a href="{% url 'post_detail' post.pk %}" class="btn btn-ghost">Cancel</a>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Threadit{% endblock %}</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="{% url 'home' %}" class="nav-logo">&#9650; threadit</a>
+
+    <div class="nav-search">
+      <form method="get" action="{% url 'home' %}">
+        <input type="text" name="q" placeholder="Search threadit" value="{{ request.GET.q }}">
+      </form>
+    </div>
+
+    <div class="nav-actions">
+      {% if user.is_authenticated %}
+        <a href="{% url 'create_post' %}" class="btn btn-outline btn-sm">+ New Post</a>
+        <a href="{% url 'create_community' %}" class="btn btn-ghost btn-sm">+ Community</a>
+        <span class="text-muted" style="font-size:13px;">{{ user.username }}</span>
+        <a href="{% url 'logout' %}" class="btn btn-ghost btn-sm">Log Out</a>
+      {% else %}
+        <a href="{% url 'login' %}" class="btn btn-outline btn-sm">Log In</a>
+        <a href="{% url 'register' %}" class="btn btn-primary btn-sm">Sign Up</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+
+{% if messages %}
+  <div class="messages-bar">
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+{% block content %}{% endblock %}
+
+</body>
+</html>

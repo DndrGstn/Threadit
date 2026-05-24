@@ -1,0 +1,84 @@
+{% extends "forum/base.html" %}
+{% block title %}{{ post.title }} – Threadit{% endblock %}
+{% block content %}
+<div class="page-wrapper">
+  <main>
+    <!-- Post -->
+    <div class="post-detail-card">
+      <div class="post-detail-inner">
+        <div class="vote-col">
+          <button class="vote-btn">&#9650;</button>
+          <span class="vote-count">{{ post.upvotes }}</span>
+          <button class="vote-btn">&#9660;</button>
+        </div>
+        <div class="post-detail-content">
+          <div class="post-meta">
+            <a href="{% url 'community_detail' post.community.name %}" style="font-weight:700;color:#1c1c1c;">r/{{ post.community.name }}</a>
+            &nbsp;·&nbsp; Posted by <a href="#">u/{{ post.author.username }}</a>
+            &nbsp;·&nbsp; {{ post.created_at|timesince }} ago
+          </div>
+          <h1 style="font-size:20px;font-weight:700;margin-bottom:8px;">{{ post.title }}</h1>
+          {% if post.body %}
+            <div class="post-full-body">{{ post.body|linebreaks }}</div>
+          {% endif %}
+          <div class="post-actions">
+            <span class="post-action-btn">&#128172; {{ post.comment_count }} Comment{{ post.comment_count|pluralize }}</span>
+            {% if user == post.author %}
+              <a href="{% url 'edit_post' post.pk %}" class="post-action-btn">&#9998; Edit</a>
+              <a href="{% url 'delete_post' post.pk %}" class="post-action-btn">&#128465; Delete</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comment Form -->
+    <div class="comment-form-card">
+      {% if user.is_authenticated %}
+        <p>Comment as <strong>{{ user.username }}</strong></p>
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="parent_id" id="reply-parent-id" value="">
+          {% for field in form %}
+            <div class="form-group">
+              {{ field }}
+              {% for error in field.errors %}
+                <ul class="error-list"><li>{{ error }}</li></ul>
+              {% endfor %}
+            </div>
+          {% endfor %}
+          <button type="submit" class="btn btn-primary btn-sm">Comment</button>
+        </form>
+      {% else %}
+        <p>
+          <a href="{% url 'login' %}">Log in</a> or
+          <a href="{% url 'register' %}">sign up</a> to leave a comment.
+        </p>
+      {% endif %}
+    </div>
+
+    <!-- Comments -->
+    <div class="comments-section">
+      {% if comments %}
+        {% for comment in comments %}
+          {% include "forum/comment.html" with comment=comment depth=0 %}
+        {% endfor %}
+      {% else %}
+        <div class="empty-state" style="padding:24px;">
+          <p>No comments yet — be the first!</p>
+        </div>
+      {% endif %}
+    </div>
+  </main>
+
+  <aside class="sidebar">
+    <div class="sidebar-card">
+      <div class="sidebar-card-header">r/{{ post.community.name }}</div>
+      <div class="sidebar-card-body">
+        <p>{{ post.community.description|default:"A community on Threadit." }}</p>
+        <a href="{% url 'community_detail' post.community.name %}" class="btn btn-outline" style="width:100%;justify-content:center;">Visit Community</a>
+      </div>
+    </div>
+  </aside>
+</div>
+{% endblock %}

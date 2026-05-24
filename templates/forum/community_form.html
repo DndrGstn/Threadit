@@ -1,0 +1,24 @@
+{% extends "forum/base.html" %}
+{% block title %}Create Community – Threadit{% endblock %}
+{% block content %}
+<div style="max-width:540px;margin:20px auto;padding:0 20px;">
+  <div class="sidebar-card">
+    <div class="sidebar-card-header">Create a Community</div>
+    <div class="sidebar-card-body">
+      <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group">
+          <label>{{ field.label }}</label>
+          {{ field }}
+          {% for error in field.errors %}
+            <ul class="error-list"><li>{{ error }}</li></ul>
+          {% endfor %}
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Create Community</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
