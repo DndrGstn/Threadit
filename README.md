@@ -153,7 +153,7 @@ Tests are executed using:
 python manage.py test forum
 ```
 
-All automated tests completed successfully.
+The project includes 18 automated tests covering the functionality listed above.
 
 ---
 
@@ -180,7 +180,7 @@ The following manual tests were performed on the deployed application.
 
 # Validation
 
-The project was validated using several industry-standard tools.
+The project was validated using several industry-standard tools. Screenshots of the validation results are included below.
 
 ## HTML
 
@@ -219,7 +219,7 @@ Google Lighthouse audit results:
 
 ## Production Security
 
-The production deployment was verified after configuration updates.
+Following the previous assessment feedback, the production deployment was reviewed and updated to ensure secure configuration.
 
 The following improvements were implemented:
 
