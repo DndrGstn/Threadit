@@ -9,7 +9,7 @@ SECRET_KEY = os.environ["SECRET_KEY"]
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = [
-    "your-app-name.herokuapp.com",
+    "threadit.herokuapp.com",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
